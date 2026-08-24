@@ -1,3 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-body bg-paper text-ink transition-colors duration-200;
+  }
+  .dark body {
+    @apply bg-[#16161e] text-gray-100;
+  }
+}
+
+@layer components {
+  /* Panel kartu gaya komik */
+  .comic-card {
+    @apply bg-white dark:bg-[#232332] border-4 border-black rounded-xl shadow-comic transition-transform;
+  }
+  .comic-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 8px 8px 0 #000;
+  }
+
+  /* Tombol gaya komik */
+  .btn-comic {
+    @apply inline-block px-4 py-2 font-bold border-4 border-black rounded-lg shadow-comic-sm active:translate-x-1 active:translate-y-1 active:shadow-none transition-all;
+  }
+
+  /* Panel/balon kata */
+  .comic-panel {
+    @apply bg-white dark:bg-[#232332] border-4 border-black rounded-2xl shadow-comic p-6 relative;
+  }
+
+  /* Titik-titik halftone komik */
+  .halftone {
+    background-image: radial-gradient(#00000022 1.5px, transparent 1.5px);
+    background-size: 14px 14px;
+  }
+  .dark .halftone {
+    background-image: radial-gradient(#ffffff18 1.5px, transparent 1.5px);
+  }
+
+  .input-comic {
+    @apply w-full px-3 py-2 border-4 border-black rounded-lg bg-white dark:bg-[#16161e] text-ink dark:text-gray-100 focus:outline-none focus:ring-4 focus:ring-pop-yellow;
+  }
+}
