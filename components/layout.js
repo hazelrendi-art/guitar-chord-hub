@@ -21,7 +21,7 @@ export default function Layout({ children, title, description }) {
               🎸 Guitar Chord <span className="text-pop-red">Hub!</span>
             </Link>
             <nav className="flex items-center gap-2">
-              <Link href="/" className="btn-comic bg-white hidden sm:inline-block">Home</Link>
+              <Link href="/" className="btn-comic bg-white dark:bg-[#232332] hidden sm:inline-block">Home</Link>
               <Link href="/chords" className="btn-comic bg-pop-blue text-white">Chords</Link>
               <Link href="/songs" className="btn-comic bg-pop-pink text-white hidden sm:inline-block">Lagu 🎵</Link>
               <ThemeToggle />
