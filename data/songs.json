@@ -1,0 +1,18 @@
+[
+  {
+    "id": "tetap-dalam-semangat",
+    "title": "Tetap Dalam Semangat",
+    "artist": "Contoh Band",
+    "difficulty": "Beginner",
+    "description": "Lagu semangat sederhana untuk pemula.",
+    "content": "[Intro]\n[C] [G] [Am] [F]\n\n[Verse 1]\n[C]Pagi hari [G]ku melangkah\n[Am]Tidak gentar [F]hadang dunia\n[C]Senyum selalu [G]di bibirku\n[Am]Yakin bisa [F]sampai tujuan\n\n[Chorus]\n[F]Tetap dalam [C]semangat\n[G]Jangan pernah [Am]menyerah\n[F]Bintang menanti[C]mu di [G]ujung sana"
+  },
+  {
+    "id": "bintang-kecil",
+    "title": "Bintang Kecil",
+    "artist": "Lagu Anak",
+    "difficulty": "Beginner",
+    "description": "Lagu anak klasik, mudah dimainkan.",
+    "content": "[Verse]\n[C]Bintang kecil [F]di langit raya\n[C]Indah bersinar [G]seperti permata\n[F]Bintang kecil [C]aku sayang\n[G]Kalau malam [C]tengok ke langit"
+  }
+]

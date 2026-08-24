@@ -1,9 +1,9 @@
-import { readChords, writeChords, slugify, isPersistent } from '../../../lib/store'
+import { getAllChords, saveAllChords, slugify } from '../../../lib/store'
 import { isAdmin } from '../../../lib/auth'
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method === 'GET') {
-    return res.status(200).json(readChords())
+    return res.status(200).json(await getAllChords())
   }
 
   if (req.method === 'POST') {
@@ -15,7 +15,7 @@ export default function handler(req, res) {
       return res.status(400).json({ error: 'Field "name" dan "fingering" wajib diisi.' })
     }
 
-    const chords = readChords()
+    const chords = await getAllChords()
     let id = slugify(name)
     while (chords.some(c => c.id === id)) id = `${id}-${Date.now() % 10000}`
 
@@ -29,11 +29,11 @@ export default function handler(req, res) {
     chords.push(chord)
 
     try {
-      writeChords(chords)
+      await saveAllChords(chords)
+      return res.status(201).json({ chord })
     } catch (e) {
       return res.status(500).json({ error: 'Gagal menyimpan: ' + e.message })
     }
-    return res.status(201).json({ chord, persistent: isPersistent() })
   }
 
   res.setHeader('Allow', ['GET', 'POST'])

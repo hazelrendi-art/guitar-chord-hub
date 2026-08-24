@@ -23,6 +23,7 @@ export default function Layout({ children, title, description }) {
             <nav className="flex items-center gap-2">
               <Link href="/" className="btn-comic bg-white hidden sm:inline-block">Home</Link>
               <Link href="/chords" className="btn-comic bg-pop-blue text-white">Chords</Link>
+              <Link href="/songs" className="btn-comic bg-pop-pink text-white hidden sm:inline-block">Lagu 🎵</Link>
               <ThemeToggle />
             </nav>
           </div>
