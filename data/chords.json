@@ -1,0 +1,44 @@
+[
+  {
+    "id": "c",
+    "name": "C Major",
+    "difficulty": "Beginner",
+    "fingering": "x32010",
+    "description": "The C major chord is one of the most basic chords for beginners."
+  },
+  {
+    "id": "g",
+    "name": "G Major",
+    "difficulty": "Beginner",
+    "fingering": "320003",
+    "description": "G major chord widely used in many songs."
+  },
+  {
+    "id": "d",
+    "name": "D Major",
+    "difficulty": "Beginner",
+    "fingering": "xx0232",
+    "description": "D major chord, bright sound."
+  },
+  {
+    "id": "em",
+    "name": "E Minor",
+    "difficulty": "Beginner",
+    "fingering": "022000",
+    "description": "E minor chord, gentle and moody."
+  },
+  {
+    "id": "am",
+    "name": "A Minor",
+    "difficulty": "Beginner",
+    "fingering": "x02210",
+    "description": "A minor chord, common in pop and rock."
+  },
+  {
+    "id": "f",
+    "name": "F Major",
+    "difficulty": "Intermediate",
+    "fingering": "133211",
+    "description": "F major chord, barre chord shape."
+  }
+]
