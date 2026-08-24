@@ -38,5 +38,5 @@ export default function SongsPage({ songs }) {
 
 export async function getStaticProps() {
   const songs = await getAllSongs()
-  return { props: { songs } }
+  return { props: { songs }, revalidate: 5 }
 }

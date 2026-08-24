@@ -32,5 +32,5 @@ export default function ChordsPage({ chords }) {
 
 export async function getStaticProps() {
   const chords = await getAllChords()
-  return { props: { chords } }
+  return { props: { chords }, revalidate: 5 }
 }

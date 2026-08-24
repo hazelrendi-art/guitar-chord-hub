@@ -85,11 +85,12 @@ export async function getStaticPaths() {
   const chords = await getAllChords()
   return {
     paths: chords.map(c => ({ params: { id: c.id } })),
-    fallback: false,
+    fallback: 'blocking',
   }
 }
 
 export async function getStaticProps({ params }) {
   const chord = await getChordById(params.id)
-  return { props: { chord } }
+  if (!chord) return { notFound: true, revalidate: 5 }
+  return { props: { chord }, revalidate: 5 }
 }
