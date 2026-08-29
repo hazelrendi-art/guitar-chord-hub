@@ -4,64 +4,100 @@ import { computeFingering } from '../lib/fingering'
 
 /* ---------- Diagram fretboard SVG ---------- */
 function FretboardDiagram({ fingering }) {
-  const strings = String(fingering).split('')
-  const W = 140, H = 190, padX = 25, padY = 30
+  const strings = String(fingering || '').split('')
+  const W = 140, H = 210, padX = 25, padY = 30
   const stringGap = (W - padX * 2) / 5
   const fretGap = (H - padY * 2) / 4
 
+  // Parse setiap senar (mendukung 'x' / '0' / '1'-'9' / '10'-'12')
+  const parsed = strings.map(s => {
+    if (s === 'x' || s === 'X') return { kind: 'mute' }
+    if (s === '0') return { kind: 'open' }
+    const n = parseInt(s, 10)
+    if (Number.isFinite(n) && n > 0) return { kind: 'fret', fret: n }
+    return { kind: 'unknown' }
+  })
+
+  // Window fret: dari fret terkecil yg dipakai sampai +3
+  const usedFrets = parsed.filter(p => p.kind === 'fret').map(p => p.fret)
+  let startFret = 1
+  if (usedFrets.length) {
+    const minF = Math.min(...usedFrets)
+    const maxF = Math.max(...usedFrets)
+    // jika rentang > 3, geser ke minF; jika rentang <=3 tapi ada fret >3, tetap di minF
+    if (maxF > 4) {
+      startFret = Math.max(1, minF)
+    } else {
+      startFret = 1
+    }
+  }
+  const endFret = startFret + 3
+  const showPosLabel = startFret > 1
+
   return (
-    <svg viewBox="0 0 160 210" width="180" className="comic-card bg-white dark:bg-[#232332] shrink-0" style={{ transform: 'rotate(2deg)' }}>
-      <line x1={padX - 4} y1={padY} x2={W - padX + 4} y2={padY} stroke="black" strokeWidth="7" />
+    <svg viewBox="0 0 160 230" width="180" className="comic-card bg-white dark:bg-[#232332] shrink-0" style={{ transform: 'rotate(2deg)' }}>
+      {/* nut (senar 0) */}
+      <line x1={padX - 4} y1={padY} x2={W - padX + 4} y2={padY} stroke="black" strokeWidth={startFret === 1 ? "7" : "3"} />
+      {/* fret wires */}
       {[1, 2, 3, 4].map(f => (
         <line key={f} x1={padX} y1={padY + f * fretGap} x2={W - padX} y2={padY + f * fretGap} stroke="#888" strokeWidth="2" />
       ))}
-      {/* label fret awal kalau posisi tinggi */}
-      {strings.some(s => s !== 'x' && s !== '0' && Number(s) > 4) && (
-        Array.from(new Set(strings.filter(s => s !== 'x' && s !== '0').map(Number))).sort((a, b) => a - b).length > 0 && (() => {
-          const minFret = Math.min(...strings.filter(s => s !== 'x' && s !== '0').map(Number))
-          const start = Math.max(1, minFret)
-          return (
-            <>
-              <text x={W / 2} y={H - 8} textAnchor="middle" fontSize="14" fontWeight="bold" fill="#555">{start}fr</text>
-            </>
-          )
-        })()
+
+      {/* label posisi (fr X) di sisi kanan kalau posisi tinggi */}
+      {showPosLabel && (
+        <text x={padX - 8} y={padY + fretGap / 2 + 5} textAnchor="end" fontSize="13" fontWeight="bold" fill="#555">
+          {startFret}fr
+        </text>
       )}
-      {strings.map((s, i) => {
+
+      {parsed.map((p, i) => {
         const x = padX + i * stringGap
-        const isMute = s === 'x'
-        const isOpen = s === '0'
-        const fret = Number(s)
-        const minPos = Math.min(...strings.filter(t => t !== 'x' && t !== '0').map(Number), 99)
-        const start = minPos > 4 ? minPos : 1  // geser window fret kalau posisi tinggi
-
-        // posisi dalam window 4-fret
-        let yPos = padY, display = ''
-        if (!isMute && !isOpen) {
-          const rel = fret - start
-          if (rel >= 0 && rel <= 3) {
-            yPos = padY + (rel + 0.5) * fretGap
-          } else {
-            yPos = padY + 3.75 * fretGap // di luar jangkauan, tampil di bawah
-            display = fret
-          }
-        }
-
-        return (
-          <g key={i}>
-            <line x1={x} y1={padY} x2={x} y2={padY + 4 * fretGap} stroke={isMute ? '#999' : '#333'} strokeWidth="2.5" />
-            {isMute && <text x={x} y={padY - 12} textAnchor="middle" fontSize="16" fontWeight="bold" fill="#FF4E4E">×</text>}
-            {isOpen && <circle cx={x} cy={padY - 14} r="7" fill="none" stroke="#333" strokeWidth="3" />}
-            {!isMute && !isOpen && (
-              <>
-                <circle cx={x} cy={yPos} r="11" fill="#FFD93D" stroke="black" strokeWidth="3" />
-                <text x={x} y={yPos + 5} textAnchor="middle" fontSize="13" fontWeight="bold">
-                  {display || fret}
-                </text>
-              </>
-            )}
-          </g>
+        // garis senar
+        const stringLine = (
+          <line key={`s${i}`} x1={x} y1={padY} x2={x} y2={padY + 4 * fretGap} stroke={p.kind === 'mute' ? '#999' : '#333'} strokeWidth="2.5" />
         )
+        if (p.kind === 'mute') {
+          return (
+            <g key={i}>
+              {stringLine}
+              <text x={x} y={padY - 12} textAnchor="middle" fontSize="16" fontWeight="bold" fill="#FF4E4E">×</text>
+            </g>
+          )
+        }
+        if (p.kind === 'open') {
+          return (
+            <g key={i}>
+              {stringLine}
+              <circle cx={x} cy={padY - 14} r="7" fill="none" stroke="#333" strokeWidth="3" />
+            </g>
+          )
+        }
+        if (p.kind === 'fret') {
+          const rel = p.fret - startFret
+          if (rel >= 0 && rel <= 3) {
+            // di dalam window — gambar titik
+            const yPos = padY + (rel + 0.5) * fretGap
+            return (
+              <g key={i}>
+                {stringLine}
+                <circle cx={x} cy={yPos} r="11" fill="#FFD93D" stroke="black" strokeWidth="3" />
+                {rel === 0 && showPosLabel === false ? null : null}
+                <text x={x} y={yPos + 5} textAnchor="middle" fontSize="12" fontWeight="bold">{p.fret}</text>
+              </g>
+            )
+          }
+          // di luar window (jauh di atas atau jauh di bawah): tampilkan label di luar fretboard
+          const above = p.fret < startFret
+          const labelY = above ? padY - 6 : padY + 4 * fretGap + 14
+          return (
+            <g key={i}>
+              {stringLine}
+              <rect x={x - 11} y={labelY - 12} width="22" height="16" rx="3" fill="#FFE066" stroke="black" strokeWidth="1.5" />
+              <text x={x} y={labelY} textAnchor="middle" fontSize="11" fontWeight="bold">{p.fret}</text>
+            </g>
+          )
+        }
+        return <g key={i}>{stringLine}</g>
       })}
     </svg>
   )
