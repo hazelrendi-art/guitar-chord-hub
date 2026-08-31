@@ -30,7 +30,7 @@ export function ThemeToggle() {
     <button
       onClick={toggle}
       aria-label="Ganti tema"
-      className="btn-comic bg-pop-purple text-white text-lg leading-none"
+      className="btn-comic bg-pop-purple text-white text-sm sm:text-lg leading-none px-2 sm:px-3 py-1 sm:py-2"
       title={dark ? 'Mode terang' : 'Mode gelap'}
     >
       {dark ? '☀️' : '🌙'}

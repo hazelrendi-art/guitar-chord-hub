@@ -13,17 +13,17 @@ export default function Layout({ children, title, description }) {
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme');if(t?t==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches){document.documentElement.classList.add('dark')}}catch(e){}})()` }} />
       </Head>
 
-      {/* Starburst dekoratif ala komik */}
       <div className="halftone min-h-screen">
         <header className="bg-pop-yellow border-b-4 border-black sticky top-0 z-50">
-          <div className="container mx-auto px-4 py-3 flex justify-between items-center gap-2">
-            <Link href="/" className="font-comic text-3xl sm:text-4xl tracking-wide text-ink hover:-rotate-1 inline-block transition-transform">
-              🎸 Guitar Chord <span className="text-pop-red">Hub!</span>
+          <div className="container mx-auto px-2 sm:px-4 py-2 flex justify-between items-center gap-1 sm:gap-2 flex-wrap">
+            <Link href="/"
+                  className="font-comic text-xl sm:text-2xl lg:text-4xl tracking-wide text-ink hover:-rotate-1 inline-block transition-transform leading-none">
+              🎸 <span className="hidden xs:inline">Guitar Chord </span><span className="text-pop-red">Hub!</span>
             </Link>
-            <nav className="flex items-center gap-2">
-              <Link href="/" className="btn-comic bg-white dark:bg-[#232332] hidden sm:inline-block">Home</Link>
-              <Link href="/chords" className="btn-comic bg-pop-blue text-white">Chords</Link>
-              <Link href="/songs" className="btn-comic bg-pop-pink text-white">Lagu 🎵</Link>
+            <nav className="flex items-center gap-1 sm:gap-2 flex-wrap">
+              <Link href="/" className="btn-comic bg-white dark:bg-[#232332] text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2">Home</Link>
+              <Link href="/chords" className="btn-comic bg-pop-blue text-white text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2">Chords</Link>
+              <Link href="/songs" className="btn-comic bg-pop-pink text-white text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2">Lagu</Link>
               <ThemeToggle />
             </nav>
           </div>
