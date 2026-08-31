@@ -1,18 +1,39 @@
-import { getAllChords, saveAllChords, slugify } from '../../../lib/store'
-import { isAdmin } from '../../../lib/auth'
+// Upgrade: rate limit, CSRF check, input validation, session token
+import { getAllChords, saveAllChords, slugify, validateChord } from '../../../lib/store'
+import { isAdmin, checkRateLimit, validateCsrfToken, getSessionToken } from '../../../lib/auth'
 
 export default async function handler(req, res) {
+  // GET — public
   if (req.method === 'GET') {
-    return res.status(200).json(await getAllChords())
+    const chords = await getAllChords()
+    return res.status(200).json(chords)
+  }
+
+  // Mutasi — haram tanpa admin
+  if (!isAdmin(req)) {
+    return res.status(401).json({ error: 'Unauthorized. Login dulu sebagai admin.' })
+  }
+
+  // Rate limit
+  const limit = checkRateLimit(req)
+  if (!limit.allowed) {
+    res.setHeader('Retry-After', limit.retryAfter)
+    return res.status(429).json({ error: `Terlalu banyak usaha. Coba lagi dalam ${limit.retryAfter}s.` })
   }
 
   if (req.method === 'POST') {
-    if (!isAdmin(req)) {
-      return res.status(401).json({ error: 'Unauthorized. Login dulu sebagai admin.' })
+    const { name, fingering, difficulty, description, csrf_token } = req.body || {}
+
+    // CSRF
+    const sessionToken = getSessionToken(req)
+    if (sessionToken && !validateCsrfToken(sessionToken, csrf_token)) {
+      return res.status(403).json({ error: 'CSRF token tidak valid atau expired.' })
     }
-    const { name, fingering, difficulty, description } = req.body || {}
-    if (!name || !fingering) {
-      return res.status(400).json({ error: 'Field "name" dan "fingering" wajib diisi.' })
+
+    // Validasi input
+    const errors = validateChord({ name, fingering, difficulty, description })
+    if (errors.length) {
+      return res.status(400).json({ error: errors.join('; ') })
     }
 
     const chords = await getAllChords()
@@ -21,19 +42,14 @@ export default async function handler(req, res) {
 
     const chord = {
       id,
-      name: String(name),
-      fingering: String(fingering),
+      name: String(name).trim(),
+      fingering: String(fingering).trim(),
       difficulty: difficulty || 'Beginner',
-      description: description || '',
+      description: String(description || '').trim(),
     }
     chords.push(chord)
-
-    try {
-      await saveAllChords(chords)
-      return res.status(201).json({ chord })
-    } catch (e) {
-      return res.status(500).json({ error: 'Gagal menyimpan: ' + e.message })
-    }
+    await saveAllChords(chords)
+    return res.status(201).json({ chord })
   }
 
   res.setHeader('Allow', ['GET', 'POST'])

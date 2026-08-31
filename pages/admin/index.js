@@ -15,6 +15,7 @@ export default function Admin() {
   const [sForm, setSForm] = useState(EMPTY_SONG)
   const [saving, setSaving] = useState(false)
   const [notice, setNotice] = useState('')
+  const [csrf, setCsrf] = useState('')
 
   async function loadData() {
     fetch('/api/chords').then(r => r.json()).then(d => Array.isArray(d) && setChords(d)).catch(() => {})
@@ -24,6 +25,7 @@ export default function Admin() {
   useEffect(() => {
     if (localStorage.getItem('admin_ok') === '1') {
       setLoggedIn(true)
+      setCsrf(localStorage.getItem('csrf_token') || '')
       loadData()
     }
   }, [])
@@ -31,12 +33,14 @@ export default function Admin() {
   async function login(e) {
     e.preventDefault(); setError('')
     const res = await fetch('/api/admin/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ password }),
     })
     if (res.ok) {
+      const data = await res.json()
       localStorage.setItem('admin_ok', '1')
+      localStorage.setItem('csrf_token', data.csrf_token || '')
+      setCsrf(data.csrf_token || '')
       setLoggedIn(true)
       loadData()
     } else {
@@ -46,14 +50,13 @@ export default function Admin() {
 
   function flash(msg) { setNotice(msg); setTimeout(() => setNotice(''), 4000) }
 
-  /* ---------- CHORD CRUD ---------- */
   async function saveChord(e) {
     e.preventDefault(); setSaving(true)
     const isEdit = !!cForm.id
     const res = await fetch(isEdit ? `/api/chords/${cForm.id}` : '/api/chords', {
       method: isEdit ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(cForm),
+      body: JSON.stringify({ ...cForm, csrf_token: csrf }),
     })
     setSaving(false)
     if (!res.ok) return flash('❌ ' + ((await res.json()).error || 'Gagal menyimpan'))
@@ -63,7 +66,7 @@ export default function Admin() {
 
   async function removeChord(id) {
     if (!confirm('Hapus chord ini?')) return
-    const res = await fetch(`/api/chords/${id}`, { method: 'DELETE' })
+    const res = await fetch(`/api/chords/${id}`, { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ csrf_token: csrf }) })
     if (res.ok) { flash('🗑️ Chord dihapus'); loadData() }
   }
 
@@ -74,7 +77,7 @@ export default function Admin() {
     const res = await fetch(isEdit ? `/api/songs/${sForm.id}` : '/api/songs', {
       method: isEdit ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(sForm),
+      body: JSON.stringify({ ...sForm, csrf_token: csrf }),
     })
     setSaving(false)
     if (!res.ok) return flash('❌ ' + ((await res.json()).error || 'Gagal menyimpan'))
@@ -84,13 +87,16 @@ export default function Admin() {
 
   async function removeSong(id) {
     if (!confirm('Hapus lagu ini?')) return
-    const res = await fetch(`/api/songs/${id}`, { method: 'DELETE' })
+    const res = await fetch(`/api/songs/${id}`, { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ csrf_token: csrf }) })
     if (res.ok) { flash('🗑️ Lagu dihapus'); loadData() }
   }
 
-  function logout() {
+  async function logout() {
+    await fetch('/api/admin/logout', { method: 'POST' })
     localStorage.removeItem('admin_ok')
-    document.cookie = 'admin_token=; Max-Age=0; Path=/'
+    localStorage.removeItem('csrf_token')
+    setCsrf('')
+    document.cookie = 'admin_session=; Max-Age=0; Path=/'
     setLoggedIn(false); setPassword('')
   }
 
