@@ -1,28 +1,68 @@
 # AGENTS.md — Panduan pi Agent untuk Project Guitar Chord Hub
 
-> **Baca ini dulu** sebelum mengerjakan apa pun di project ini.
-> Project ini DI-DEVELOP dan DI-RUN di **Termux (Android)**, bukan Linux/PC biasa.
-> Ada beberapa limitasi platform yang wajib dipahami agar tidak mengulang debugging dari nol.
+> **Baca bagian atas ini dulu** untuk ringkasan. Scroll ke bawah untuk detail lengkap.
+
+## TL;DR — Quick Start (Hemat Token)
+
+```bash
+# 1. Install (Termux)
+npm install --no-bin-links
+
+# 2. Dev
+npm run dev          # http://localhost:3000
+
+# 3. Build
+npm run build
+
+# 4. Test semua route
+for u in / /chords /chord/c /api/chords; do
+  curl -s -o /dev/null -w "$u -> %{http_code}\n" http://localhost:3000$u
+done
+
+# 5. Deploy = git push
+# Vercel auto-build dari GitHub main branch
+```
+
+### Struktur Penting (Yang Sering Diubah)
+- `data/chords.json` — data chord (tambah/edit di sini)
+- `data/songs.json` — data lagu
+- `pages/api/` — CRUD API
+- `components/chord-viewer.js` — diagram fretboard + transpose
+- `lib/transpose.js` — logika transpose
+
+### Kalau Error
+| Error | Fix |
+|---|---|
+| `EACCES symlink` | `npm install --no-bin-links` |
+| `sh: next: not found` | Sudah pakai `node node_modules/next/dist/bin/next` |
+| Vercel stuck di 6 chord | Hapus KV key `gch:chords` di dashboard Vercel → Redeploy |
+| curl 000 | Port 3000 dipakai → cek `Local:` di log |
+
+### Deploy Checklist
+1. `git add .` → `git commit` → `git push`
+2. Vercel auto-build dari `origin/main`
+3. Kalau data lama di Vercel: hapus KV key → Redeploy
+4. Live di: **https://guitar-chord-hub.vercel.app**
+
+### Catatan Penting
+- **JANGAN upgrade** `next` ke 15+, **JANGAN** tambah `"type":"commonjs"`
+- **Chord ID** harus URL-safe (pakai `-`, bukan `/`)
+- Admin password: `.env.local` → `ADMIN_PASSWORD`
 
 ---
 
-## 1. Konteks Project
+## Detail Lengkap
+
+> Sisa dokumen ini untuk konteks teknis penuh.
+
+### 1. Konteks Project
 
 - **Nama:** Guitar Chord Hub
 - **Stack:** Next.js 14.2.33 (Pages Router) + React 18 + Tailwind CSS 3
 - **Struktur:**
-  ```
-  guitar-chord-web/
-  ├── components/layout.js      # Layout + SEO meta tags (next/head)
-  ├── data/chords.json          # Sumber data chord (tambah chord di sini)
-  ├── lib/chordData.js          # Helper baca JSON (getAllChords, getChordById)
-  ├── pages/index.js            # Homepage (SSG)
-  ├── pages/chords/index.js     # Daftar semua chord (SSG)
-  ├── pages/chord/[id].js       # Detail chord (SSG + getStaticPaths)
-  ├── pages/api/chords.js       # REST API endpoint (GET /api/chords)
-  ├── scripts/patch-termux.js   # Patch SWC untuk Android (WAJIB, jangan dihapus)
-  └── public/                   # Aset statis
-  ```
+
+---
+
 
 ## 2. Limitasi Wajib Tahu di Termux/Android
 
