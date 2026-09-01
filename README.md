@@ -1,4 +1,4 @@
-# Guitar Chord Hub
+# ChordSpace
 
 A modern, SEO-friendly web application for guitar chords, built with Next.js and Tailwind CSS. Easy to deploy on free hosting platforms like Vercel, Netlify, or Render.
 
@@ -15,7 +15,7 @@ A modern, SEO-friendly web application for guitar chords, built with Next.js and
 ## Project Structure
 
 ```
-/guitar-chord-web
+/chordspace-web
   /components       # React components (Layout, etc.)
   /data             # JSON data source for chords
   /lib              # Utility functions (chord data access)
@@ -36,7 +36,7 @@ A modern, SEO-friendly web application for guitar chords, built with Next.js and
 1. Clone the repository
    ```bash
    git clone <your-repo-url>
-   cd guitar-chord-web
+   cd chordspace-web
    ```
 
 2. Install dependencies

@@ -6,7 +6,7 @@ export default function Layout({ children, title, description }) {
   return (
     <>
       <Head>
-        <title>{title || 'Guitar Chord Hub - Kumpulan Chord Gitar Modern'}</title>
+        <title>{title || 'ChordSpace - Kumpulan Chord Gitar Modern'}</title>
         <meta name="description" content={description || 'Jelajahi ratusan chord gitar dengan diagram mudah dibaca, transpose chord, pencarian cepat, dan tampilan responsif.'} />
         <meta name="keywords" content="chord gitar, kunci gitar, chord dasar, transpose chord, belajar gitar" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -34,7 +34,7 @@ export default function Layout({ children, title, description }) {
         <footer className="bg-ink text-gray-100 border-t-4 border-black p-6 mt-12">
           <div className="container mx-auto text-center font-body">
             <p className="font-comic text-2xl tracking-wide">POW! Keep Strummin&apos;!</p>
-            <p className="text-sm opacity-70 mt-1">&copy; {new Date().getFullYear()} Guitar Chord Hub</p>
+            <p className="text-sm opacity-70 mt-1">&copy; {new Date().getFullYear()} ChordSpace</p>
           </div>
         </footer>
       </div>

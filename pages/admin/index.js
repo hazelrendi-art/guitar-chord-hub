@@ -103,7 +103,7 @@ export default function Admin() {
   /* ================= LOGIN VIEW ================= */
   if (!loggedIn) {
     return (
-      <Layout title="Admin Login | Guitar Chord Hub">
+      <Layout title="Admin Login | ChordSpace">
         <div className="comic-panel max-w-md mx-auto mt-10 rotate-1">
           <h1 className="font-comic text-4xl text-center">🔐 ADMIN ONLY!</h1>
           <p className="text-center text-sm opacity-70 mt-1 mb-5">Masuk untuk mengelola chord & lagu</p>
@@ -120,7 +120,7 @@ export default function Admin() {
 
   /* ================= DASHBOARD ================= */
   return (
-    <Layout title="Admin Panel | Guitar Chord Hub">
+    <Layout title="Admin Panel | ChordSpace">
       <div className="flex justify-between items-center mb-4 flex-wrap gap-2">
         <h1 className="font-comic text-4xl">🦸 Admin Panel</h1>
         <button onClick={logout} className="btn-comic bg-pop-red text-white text-sm">Logout</button>

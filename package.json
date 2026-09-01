@@ -1,5 +1,5 @@
 {
-  "name": "guitar-chord-hub",
+  "name": "chordspace",
   "version": "1.0.0",
   "description": "Web chord gitar modern, SEO-friendly, siap deploy gratis (Vercel/Netlify)",
   "main": "index.js",

@@ -17,7 +17,7 @@ export default function ChordPage({ chord }) {
   }
 
   return (
-    <Layout title={`${chord.name} Chord - Fingering & Transpose | Guitar Chord Hub`}
+    <Layout title={`${chord.name} Chord - Fingering & Transpose | ChordSpace`}
             description={`Chord ${chord.name}: posisi jari ${chord.fingering}. Tingkat ${chord.difficulty}. Lengkap dengan fitur transpose.`}>
       <Link href="/chords" className="btn-comic bg-white dark:bg-[#232332] text-sm mb-6 inline-block">← Semua chord</Link>
 

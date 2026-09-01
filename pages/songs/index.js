@@ -6,7 +6,7 @@ const COLORS = ['bg-pop-yellow', 'bg-pop-pink', 'bg-pop-blue', 'bg-pop-green']
 
 export default function SongsPage({ songs }) {
   return (
-    <Layout title="Kumpulan Chord Lagu | Guitar Chord Hub"
+    <Layout title="Kumpulan Chord Lagu | ChordSpace"
             description="Kumpulan chord gitar lengkap dengan lirik. Dilengkapi fitur transpose real-time.">
       <div className="comic-panel bg-white dark:bg-[#232332] mb-8 rotate-1">
         <h1 className="font-comic text-4xl sm:text-5xl">🎵 Chord LAGU!</h1>

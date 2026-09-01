@@ -4,7 +4,7 @@ import { getAllChords } from '../../lib/chordData'
 
 export default function ChordsPage({ chords }) {
   return (
-    <Layout title="Semua Chord Gitar | Guitar Chord Hub">
+    <Layout title="Semua Chord Gitar | ChordSpace">
       <div className="comic-panel bg-white dark:bg-[#232332] mb-8 -rotate-1">
         <h1 className="font-comic text-4xl sm:text-5xl">All the CHORDS!</h1>
         <p className="mt-1 opacity-70">{chords.length} chord tersedia. Klik untuk detail & transpose.</p>

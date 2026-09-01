@@ -1,4 +1,4 @@
-# AGENTS.md — Panduan pi Agent untuk Project Guitar Chord Hub
+# AGENTS.md — Panduan pi Agent untuk Project ChordSpace
 
 > **Baca bagian atas ini dulu** untuk ringkasan. Scroll ke bawah untuk detail lengkap.
 
@@ -57,7 +57,7 @@ done
 
 ### 1. Konteks Project
 
-- **Nama:** Guitar Chord Hub
+- **Nama:** ChordSpace
 - **Stack:** Next.js 14.2.33 (Pages Router) + React 18 + Tailwind CSS 3
 - **Struktur:**
 

@@ -17,7 +17,7 @@ export default function SongPage({ song }) {
   }
 
   return (
-    <Layout title={`${song.title} - ${song.artist} (Chord & Lirik) | Guitar Chord Hub`}
+    <Layout title={`${song.title} - ${song.artist} (Chord & Lirik) | ChordSpace`}
             description={`Chord gitar dan lirik lagu "${song.title}" dari ${song.artist}. Lengkap dengan fitur transpose real-time.`}>
       <Link href="/songs" className="btn-comic bg-white dark:bg-[#232332] text-sm mb-6 inline-block">← Semua lagu</Link>
 
